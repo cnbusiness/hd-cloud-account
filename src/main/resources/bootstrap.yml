@@ -1,0 +1,98 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: hd-cloud-account
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: hd-config-server
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-interval: 10000
+        multiplier: 2
+        max-attempts: 10
+  rabbitmq:
+    host: 192.168.168.100
+    port: 5672
+  sleuth:
+    sampler:
+      percentage: 1
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+            defaultZone: http://eureka.didispace.com/eureka/
+
+endpoints:
+ shutdown:
+  enabled: true
+  
+feign:
+  hystrix:
+    enabled: true  
+
+---
+spring:
+  profiles: docker
+  application:
+    name: hd-cloud-account
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: hd-config-server
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-interval: 10000
+        multiplier: 2
+        max-attempts: 10
+  rabbitmq:
+    host: rabbitmq-server
+    port: 5672
+  sleuth:
+    sampler:
+      percentage: 1
+  //zipkin:
+    //base-url: http://zipkin:9411/
+
+server:
+    port: 8080
+
+eureka:
+  instance:
+    hostname: hd-cloud-account
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+            defaultZone: http://eureka-server:8761/eureka/
+
+endpoints:
+ shutdown:
+  enabled: true
+  
+feign:
+  hystrix:
+    enabled: true  
+
+hystrix:
+   command:
+    default:
+     execution:
+       isolation:
+         thread:
+           timeoutInMilliseconds: 30000
+   threadpool:
+     default:
+       coreSize: 500          

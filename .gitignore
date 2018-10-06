@@ -1,0 +1,17 @@
+/bin/
+/build/
+/*.classpath
+/.gradle/2.5/taskArtifacts/*.properties
+/*.project
+/.settings/gradle/*.prefs
+/.gradle/2.5/taskArtifacts/*.bin
+/.gradle/2.5/taskArtifacts/*.lock
+/.settings/*.prefs
+/.gradle/3.2/taskArtifacts/*.bin
+/.gradle/3.2/taskArtifacts/*.lock
+/.gradle/2.2.1/taskArtifacts/*.bin
+/.gradle/2.2.1/taskArtifacts/*.properties
+/.gradle/2.2.1/taskArtifacts/*.lock
+/.gradle
+/out
+/.settings

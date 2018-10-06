@@ -1,0 +1,202 @@
+buildscript {
+    repositories {
+        //maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' } // aliyun
+        mavenLocal() 
+        maven { url "http://nexus.dev.178by.com/nexus/content/groups/public/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+    }
+}
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'net.researchgate.release' version '2.5.0'
+    id 'com.github.ben-manes.versions' version '0.14.0'
+}
+
+apply plugin: 'project-report'
+apply plugin: 'maven-publish'
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+
+group = 'com.hd.cloud'
+
+repositories{
+    //maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'} 
+    mavenLocal() 
+    maven { url "http://nexus.dev.178by.com/nexus/content/groups/public/" }
+}
+
+ext.versions = [
+    'springweb' : '4.3.6.RELEASE',
+    'springsecurity' : '4.2.1.RELEASE',
+    'lombok' : '1.6.14',
+    'pagehelper' : '5.0.0',
+    'commonsLang3' : '3.5',
+    'commonsIO' : '2.5',
+    'guava' : '21.0',
+    'gson' : '2.8.0',
+    'guice' : '4.1.0',
+    'protobuf' : '3.2.0',
+    'protobufJavaFormat' : '1.4',
+    'kafka' :  '0.10.2.0',
+    'lombok' : '1.16.14',
+    'logback' : '1.2.1',
+    'log4j' : '2.8',
+    'slf4j'   : '1.7.24'
+
+]
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR5"
+    }
+}
+
+dependencies {
+    compile('org.springframework.cloud:spring-cloud-starter-eureka'){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile('org.springframework.cloud:spring-cloud-starter-feign'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.cloud:spring-cloud-starter-ribbon'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.boot:spring-boot-starter-actuator'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.boot:spring-boot-starter-validation'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.boot:spring-boot-starter-aop'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.retry:spring-retry'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.cloud:spring-cloud-starter-config'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.cloud:spring-cloud-starter-bus-amqp'){
+    	exclude module : 'logback-classic'
+    }
+    compile('org.springframework.cloud:spring-cloud-bus'){
+    	exclude module : 'logback-classic'
+    }
+    //compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+    
+    //spring redis
+	compile("org.springframework.boot:spring-boot-starter-data-redis"){
+    	exclude module : 'logback-classic'
+    } 
+
+    compile ('org.springframework.boot:spring-boot-autoconfigure'){
+        exclude module : 'logback-classic'
+    }
+
+     // MyBatis
+    compile ('org.mybatis:mybatis:3.4.4'){
+    	exclude module : 'logback-classic'
+    } 
+    
+    compile ('org.mybatis:mybatis-spring:1.3.1'){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile ('org.mybatis.spring.boot:mybatis-spring-boot:1.1.1'){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile ('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.1'){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile ('org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:1.1.1'){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile("org.springframework.boot:spring-boot-starter-jdbc"){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile("com.zaxxer:HikariCP:2.5.1"){
+    	exclude module : 'logback-classic'
+    }
+    
+	compile("mysql:mysql-connector-java:5.1.34"){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile("com.hlb.cloud:hlb-cloud-commons:1.0.17"){
+    	exclude module : 'servlet-api'
+    }  
+    
+    compile("io.springfox:springfox-swagger2:2.7.0"){
+    	exclude module : 'logback-classic'
+    }
+    
+    compile("io.springfox:springfox-swagger-ui:2.7.0"){
+    	exclude module : 'logback-classic'
+    }
+	
+	compile("commons-codec:commons-codec:1.9"){
+    	exclude module : 'logback-classic'
+    }   
+    
+	compile("org.slf4j:slf4j-api:$versions.slf4j")
+    compile("org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j")
+    compile("org.apache.logging.log4j:log4j-api:$versions.log4j")
+    compile("org.apache.logging.log4j:log4j-core:$versions.log4j")
+    compile("org.apache.logging.log4j:log4j-jcl:$versions.log4j")
+    compile("org.apache.logging.log4j:log4j-jul:$versions.log4j")
+    
+    testCompile('org.springframework.boot:spring-boot-starter-test'){
+    	exclude module : 'logback-classic'
+    } 
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "admin"
+                password "admin123"
+            }
+
+            if(project.version.endsWith('-SNAPSHOT')) {
+                url "http://192.168.168.100:889/nexus/content/repositories/snapshots/"
+            } else {
+                url "http://192.168.168.100:889/nexus/content/repositories/releases/"
+            }
+        }
+    }
+}
+
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+build.dependsOn dependencyUpdates
+
+release {
+    tagTemplate = '${name}'
+    git {
+        requireBranch = 'master'
+        pushToRemote = 'origin'
+        pushToBranchPrefix = ''
+        commitVersionFileOnly = false
+    }
+}

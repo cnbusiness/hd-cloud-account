@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <RollingFile name="error" fileName="/app/logs/${env:LOGS_NAME}-error.log"
+            filePattern="/app/logs/$${date:yyyy-MM}/${env:LOGS_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz" Append="true" >
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500M"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="16"/>
+        </RollingFile>
+        <RollingFile name="log" fileName="/app/logs/${env:LOGS_NAME}-log.log"
+            filePattern="/app/logs/$${date:yyyy-MM}/${env:LOGS_NAME}-log-%d{yyyy-MM-dd}-%i.log.gz" Append="true" >
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500M"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="16"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="error" />
+            <AppenderRef ref="log" />
+        </Root>
+    </Loggers>
+</Configuration>
